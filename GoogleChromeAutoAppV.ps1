@@ -1,5 +1,4 @@
-﻿# script to download google chrome enterprise 64 bit and create appV
-
+﻿# script to download google chrome enterprise 64 bit and create appv
 param(
 [string]$downloadFolder,
 [string]$AppVLocation
@@ -43,7 +42,7 @@ if ($name[0].Comments -match  '[^\s]+') {
 $ver = $Matches[0]
 }
 
-Set-Location C:\workingDir\g
+Set-Location $downloadFolder
 
 New-AppvSequencerPackage  -Name "Google - Chrome - $ver (1.0)" -Installer "$downloadFolder\Chrome\GoogleChromeStandaloneEnterprise64.msi" -Path $AppVLocation
 

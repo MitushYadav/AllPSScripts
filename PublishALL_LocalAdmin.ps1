@@ -3,8 +3,7 @@
 
 $invokingHost = hostname
 
-$secpasswd = ConvertTo-SecureString "sep0692!" -AsPlainText -Force
-$mycreds = New-Object System.Management.Automation.PSCredential ("prod\myadav", $secpasswd)
+
 
 $AllLoggedOnUsers = Get-RDUserSession -ConnectionBroker "PROD481.prod.telenet.be" | Where HostServer -eq "$invokingHost.prod.telenet.be"
 
