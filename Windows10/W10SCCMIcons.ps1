@@ -80,6 +80,12 @@ Function Check-CMAppIcons {
                 $null
             }
         }
+
+        If($ImportIcons) {
+            If($IconInfo.SCCMIcon -ne 'Yes') {
+            ..\Set-CMApplicationIcon.ps1 -SiteServer 'EWP001704.prod.telenet.be' -SiteCode 'CMC' -ApplicationName $($app.LocalizedDisplayName) -IconSize 400 -IconFolder $iconFolder
+            }
+        }
     }
 
     $Header = @"
@@ -90,6 +96,5 @@ Function Check-CMAppIcons {
     </style>
 "@
     $IconInfo | ConvertTo-Html -Property Application,SCCMIcon,IconFile -Head $Header | Out-File -FilePath C:\workingDir\iconReportW10.html
-    
 
 }
