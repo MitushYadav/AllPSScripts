@@ -1,48 +1,56 @@
-﻿
-param (
-$ApplicationName
-)
+﻿Function Get-CMAppFolderPath {
+    param (
 
-$SiteCode = "PRD"
+    [Parameter(Mandatory=$true)]
+    [string]
+    $ApplicationName,
 
-$SiteServer = "PROD425"
+    [Parameter(Mandatory=$true)]
+    [string]
+    $SiteCode,
 
-Set-Location "$($SiteCode):"
+    [Parameter(Mandatory=$true)]
+    [string]
+    $SiteServer
+    )
 
-$InstanceKey = (Get-CMApplication -Name $ApplicationName -Fast).ModelName
+    Set-Location "$($SiteCode):"
 
-$ContainerNode = Get-WmiObject -Namespace root/SMS/site_$($SiteCode) -ComputerName $SiteServer -Query "SELECT ocn.* FROM SMS_ObjectContainerNode AS ocn JOIN SMS_ObjectContainerItem AS oci ON ocn.ContainerNodeID=oci.ContainerNodeID WHERE oci.InstanceKey='$InstanceKey'"
-if ($ContainerNode -ne $null) {
-    $ObjectFolder = $ContainerNode.Name
-    
-    # step 2
+    $InstanceKey = (Get-CMApplication -Name $ApplicationName -Fast).ModelName
 
-    if ($ContainerNode.ParentContainerNodeID -eq 0) {
-    $ParentFolder = $false
-}
-else {
-    $ParentFolder = $true
-    $ParentContainerNodeID = $ContainerNode.ParentContainerNodeID
-}
+    $ContainerNode = Get-WmiObject -Namespace root/SMS/site_$($SiteCode) -ComputerName $SiteServer -Query "SELECT ocn.* FROM SMS_ObjectContainerNode AS ocn JOIN SMS_ObjectContainerItem AS oci ON ocn.ContainerNodeID=oci.ContainerNodeID WHERE oci.InstanceKey='$InstanceKey'"
+    if ($ContainerNode -ne $null) {
+        $ObjectFolder = $ContainerNode.Name
+        
+        # step 2
 
-# step 3
-
-while ($ParentFolder -eq $true) {
-    $ParentContainerNode = Get-WmiObject -Namespace root/SMS/site_$($SiteCode) -ComputerName $SiteServer -Query "SELECT * FROM SMS_ObjectContainerNode WHERE ContainerNodeID = '$ParentContainerNodeID'"
-    $ObjectFolder =  $ParentContainerNode.Name + "\" + $ObjectFolder
-    if ($ParentContainerNode.ParentContainerNodeID -eq 0) {
+        if ($ContainerNode.ParentContainerNodeID -eq 0) {
         $ParentFolder = $false
     }
     else {
-        $ParentContainerNodeID = `
-            $ParentContainerNode.ParentContainerNodeID
+        $ParentFolder = $true
+        $ParentContainerNodeID = $ContainerNode.ParentContainerNodeID
     }
-}
-    
-    $ObjectFolder = "Root\" + $ObjectFolder
-    Write-Output $ObjectFolder
-}
-else {
-    $ObjectFolder = "Root"
-    Write-Output $ObjectFolder
+
+    # step 3
+
+    while ($ParentFolder -eq $true) {
+        $ParentContainerNode = Get-WmiObject -Namespace root/SMS/site_$($SiteCode) -ComputerName $SiteServer -Query "SELECT * FROM SMS_ObjectContainerNode WHERE ContainerNodeID = '$ParentContainerNodeID'"
+        $ObjectFolder =  $ParentContainerNode.Name + "\" + $ObjectFolder
+        if ($ParentContainerNode.ParentContainerNodeID -eq 0) {
+            $ParentFolder = $false
+        }
+        else {
+            $ParentContainerNodeID = `
+                $ParentContainerNode.ParentContainerNodeID
+        }
+    }
+        
+        $ObjectFolder = "Root\" + $ObjectFolder
+        Write-Output $ObjectFolder
+    }
+    else {
+        $ObjectFolder = "Root"
+        Write-Output $ObjectFolder
+    }
 }
