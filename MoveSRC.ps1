@@ -1,10 +1,6 @@
-﻿# current format \\prod.telenet.be\adm\WSAAS\Software Deployment\Packages\IBM\Datastage\11.5\2.SRC
+﻿
 
-# required format \\prod.telenet.be\adm\WSAAS\Software Deployment\Packages\Mozilla\Firefox\2.SRC\57.0.4
-
-# $vendors = get-childitem -Path "\\prod.telenet.be\adm\WSAAS\Software Deployment\Packages"
-
-$rootpath = "\\prod.telenet.be\adm\WSAAS\Software Deployment\Packages"
+$rootpath = #!!!specify path here
 
 $vendors = get-childitem -path $rootpath
 
