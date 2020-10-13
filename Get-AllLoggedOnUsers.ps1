@@ -9,9 +9,10 @@
 
   ForEach($user in $query) {
 
-    $splitUser = $user -Split '\s+'
+    $splitUser = $user.Trim() -Split '\s+'
+    Write-Host $splitUser
 
-    $LoggedOnUser.UserName =  $(If($splitUser[0][0] -eq '>') { $splitUser[0].Remove(0,1) })
+    $LoggedOnUser.UserName =  $splitUser[0].Replace(">", "")
     $LoggedOnUser.SessionName = $splitUser[1]
     $LoggedOnUser.ID = $splitUser[2]
     $LoggedOnUser.State = $splitUser[3]
