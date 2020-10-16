@@ -1,4 +1,4 @@
-Function Traverse-Folder {
+Function Traverse-FolderUp {
     <#
     .Description
     Traverses N number to folders up

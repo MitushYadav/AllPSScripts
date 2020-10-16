@@ -27,7 +27,7 @@ Process {
  
         # Return the value
         return $Value
-    } 
+    }
     catch {
         Write-Warning -Message $_.Exception.Message ; break
     }
