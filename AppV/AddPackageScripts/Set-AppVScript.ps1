@@ -36,19 +36,19 @@ param (
     $DeleteExistingScriptFile,
     # Inline Script Block
     [Parameter(ParameterSetName='Inline', Mandatory=$false)]
-    [string]
+    [string[]]
     $AddPackageScript,
     # Inline Script Block
     [Parameter(ParameterSetName='Inline', Mandatory=$false)]
-    [string]
+    [string[]]
     $RemovePackageScript,
     # Inline Script Block
     [Parameter(ParameterSetName='Inline', Mandatory=$false)]
-    [string]
+    [string[]]
     $PublishPackageUserScript,
     # Inline Script Block
     [Parameter(ParameterSetName='Inline', Mandatory=$false)]
-    [string]
+    [string[]]
     $UnpublishPackageUserScript
 )
 
@@ -170,39 +170,39 @@ Set-ElementAttribute AppxManifest.xml -xpath "appv:CONTEXT/appv:ACTION/appv:Wait
 "@
     if($AddPackageScript) {
         Write-Host "Adding AddPackage Machine Script"
-        foreach($CommandToInsert in $AddPackageScript) {
-            $srArgs += "-AppVScript $CommandToInsert -appvscriptrunnerparameters -wait " #trailing whitespace requried
+        foreach($CommandToInsertAP in $AddPackageScript) {
+            $srArgs1 += "-AppVScript $CommandToInsertAP -appvscriptrunnerparameters -wait " #trailing whitespace required
         }
         $simpleScript -replace "ACTION", "AddPackage" `
         -replace "CONTEXT", "MachineScripts" `
-        -replace "SR_ARGS", $srArgs | Add-Content -Path $batchScriptFilePath
+        -replace "SR_ARGS", $srArgs1 | Add-Content -Path $batchScriptFilePath
     }
     if($RemovePackageScript) {
         Write-Host "Adding RemovePackage Machine Script"
-        foreach($CommandToInsert in $RemovePackageScript) {
-            $srArgs += "-AppVScript $CommandToInsert -appvscriptrunnerparameters -wait " #trailing whitespace requried
+        foreach($CommandToInsertRP in $RemovePackageScript) {
+            $srArgs2 += "-AppVScript $CommandToInsertRP -appvscriptrunnerparameters -wait " #trailing whitespace requried
         }
-        $ScriptText -replace "ACTION", "RemovePackage" `
+        $simpleScript -replace "ACTION", "RemovePackage" `
         -replace "CONTEXT", "MachineScripts" `
-        -replace "SR_ARGS", $srArgs | Add-Content -Path $batchScriptFilePath
+        -replace "SR_ARGS", $srArgs2 | Add-Content -Path $batchScriptFilePath
     }
     if($PublishPackageUserScript) {
         Write-Host "Adding PublishPackage User Script"
-        foreach($CommandToInsert in $PublishPackageUserScript) {
-            $srArgs += "-AppVScript $CommandToInsert -appvscriptrunnerparameters -wait " #trailing whitespace requried
+        foreach($CommandToInsertPP in $PublishPackageUserScript) {
+            $srArgs3 += "-AppVScript $CommandToInsertPP -appvscriptrunnerparameters -wait " #trailing whitespace requried
         }
-        $ScriptText -replace "ACTION", "PublishPackage" `
+        $simpleScript -replace "ACTION", "PublishPackage" `
         -replace "CONTEXT", "UserScripts" `
-        -replace "SR_ARGS", $srArgs | Add-Content -Path $batchScriptFilePath
+        -replace "SR_ARGS", $srArgs3 | Add-Content -Path $batchScriptFilePath
     }
     if($UnpublishPackageUserScript) {
         Write-Host "Adding UnpublishPackage User Script"
-        foreach($CommandToInsert in $PublishPackageUserScript) {
-            $srArgs += "-AppVScript $CommandToInsert -appvscriptrunnerparameters -wait " #trailing whitespace requried
+        foreach($CommandToInsertUP in $PublishPackageUserScript) {
+            $srArgs4 += "-AppVScript $CommandToInsertUP -appvscriptrunnerparameters -wait " #trailing whitespace requried
         }
-        $ScriptText -replace "ACTION", "UnpublishPackage" `
+        $simpleScript -replace "ACTION", "UnpublishPackage" `
         -replace "CONTEXT", "UserScripts" `
-        -replace "SR_ARGS", $srArgs | Add-Content -Path $batchScriptFilePath
+        -replace "SR_ARGS", $srArgs4 | Add-Content -Path $batchScriptFilePath
     }
 }
 
