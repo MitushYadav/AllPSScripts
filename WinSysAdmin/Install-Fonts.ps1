@@ -6,4 +6,4 @@ $dest = $obj.Namespace(0x14)
 $sourceDir = ""
 
 #Copy and Install Fonts, currently only OTF and TTF
-Get-ChildItem -Path "$sourceDir\*" -Include "*.otf,*.ttf" | ForEach-Object { $dest.CopyHere($PSItem.FullName,0x10) }
+Get-ChildItem -Path "$sourceDir\*" -Include "*.otf","*.ttf" | ForEach-Object { $dest.CopyHere($PSItem.FullName,0x10) }
