@@ -31,4 +31,4 @@ function Write-Log {
     }
 }
 
-get-rdusersession -ConnectionBroker prod482.prod.telenet.be -CollectionName "RA Universal PRD" | where UserName -eq "dkomarul" | ForEach-Object { invoke-rduserlogoff -HostServer $PSItem.HostServer -UnifiedSessionID $PSItem.UnifiedSessionId -Force -Verbose } 
+get-rdusersession -ConnectionBroker <ConnectionBroker> -CollectionName "<CollectionName>" | where UserName -eq "<username>" | ForEach-Object { invoke-rduserlogoff -HostServer $PSItem.HostServer -UnifiedSessionID $PSItem.UnifiedSessionId -Force -Verbose } 
